@@ -1,36 +1,47 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# CO2 Optimiser
 
-## Getting Started
+A sandbox that starts from the average CO2 footprint of your country (Germany, USA) and shows which lifestyle changes move it the most. Product spec: [`docs/PRD.md`](docs/PRD.md).
 
-First, run the development server:
+## What's in the MVP
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+- **Country picker** with an instant baseline (UBA 9.8 t for Germany; a provisional 16 t for the USA).
+- **Stacked before/after bars** ("Average" vs "Your choices"), the ~1 t Paris-compatible target and an uncertainty whisker. Hover a segment for details; "Show as table" gives the same data as a table.
+- **Category cards** with option chips. Each chip shows how your total would change if you picked it, and the selected option shows its basis, confidence (Sourced / Derived / Estimate) and source.
+- **Top 3 levers**: the single switches with the biggest saving from where you are now, with a one-click "Try".
+- **Equivalents**: km (or miles) by car, long-haul flights, beef steaks or tree seedlings.
+- **Non-CO2 flight effects** toggle (DESNZ ×1.7 uplift).
+- **Share link**: the whole scenario lives in the URL hash, so any state can be shared or bookmarked.
+- **Sources and method** panel listing every source used for the selected country.
+
+## How the numbers work
+
+All data lives in [`src/data/factors.json`](src/data/factors.json) (versioned). The model in [`src/lib/model.ts`](src/lib/model.ts) is:
+
+```
+footprint = Σ categories
+category  = baseline + Σ dimension deltas
+delta     = option.delta × Π(scale of selected options in `scaledBy` dimensions)
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Each option stores `delta`, `low`, `high` (t CO2e/yr vs average), `confidence`, `sources` and a one-line `basis`. `scaledBy` handles options that interact: the car type effect scales with how much you drive, and heating type, insulation, living space and room temperature multiply. Because `scaledBy` only points at earlier dimensions, the chained deltas add up to an exact product.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+To add a country, add an entry under `countries` with its baselines, options and equivalents; `npm test` checks the file for consistency.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Data status
 
-## Learn More
+| Country | Baseline | Options |
+|---|---|---|
+| Germany | UBA 2026, sourced | Mix of sourced (UBA diet, insulation), derived (DESNZ car and flight factors) and estimates |
+| USA | **Provisional**: 16 t within a 14 to 17+ t range, category split is a project estimate | Mostly estimates and derived values |
 
-To learn more about Next.js, take a look at the following resources:
+Before launch: pick one primary US source (CoolClimate is the lead candidate), replace every `"confidence": "estimate"` value with a sourced one, and re-check source links (they were not verified online when this version was written).
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Development
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm install
+npm run dev        # http://localhost:3000
+npm test           # model + data consistency tests (node:test)
+npm run lint
+npm run build
+```

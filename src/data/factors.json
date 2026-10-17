@@ -1,0 +1,938 @@
+{
+  "version": "0.1.0",
+  "updated": "2026-10-17",
+  "unit": "t CO2e per person per year",
+  "flightNonCo2Multiplier": 1.7,
+  "target": {
+    "value": 1,
+    "label": "Paris-compatible target (~1 t by 2050)"
+  },
+  "sources": {
+    "uba-rechner": {
+      "title": "CO2-Rechner: average per-capita footprint by category",
+      "publisher": "Umweltbundesamt (UBA)",
+      "year": 2026,
+      "url": "https://uba.co2-rechner.de/"
+    },
+    "uba-tips": {
+      "title": "Umwelttipps für den Alltag (consumer guidance with savings estimates)",
+      "publisher": "Umweltbundesamt (UBA)",
+      "year": 2026,
+      "url": "https://www.umweltbundesamt.de/"
+    },
+    "coolclimate": {
+      "title": "CoolClimate Calculator: US household footprints",
+      "publisher": "CoolClimate Network, UC Berkeley",
+      "year": 2026,
+      "url": "https://coolclimate.org/"
+    },
+    "umich-css": {
+      "title": "Carbon Footprint Factsheet",
+      "publisher": "University of Michigan, Center for Sustainable Systems",
+      "year": 2025,
+      "url": "https://css.umich.edu/publications/factsheets/sustainability-indicators/carbon-footprint-factsheet"
+    },
+    "owid-food": {
+      "title": "Environmental impacts of food (Poore & Nemecek 2018)",
+      "publisher": "Our World in Data",
+      "year": 2018,
+      "url": "https://ourworldindata.org/environmental-impacts-of-food"
+    },
+    "desnz": {
+      "title": "Greenhouse gas reporting: conversion factors 2026",
+      "publisher": "UK Department for Energy Security and Net Zero (DESNZ)",
+      "year": 2026,
+      "url": "https://www.gov.uk/government/collections/government-conversion-factors-for-company-reporting"
+    },
+    "epa-hub": {
+      "title": "GHG Emission Factors Hub (incl. eGRID electricity)",
+      "publisher": "US Environmental Protection Agency (EPA)",
+      "year": 2025,
+      "url": "https://www.epa.gov/climateleadership/ghg-emission-factors-hub"
+    },
+    "epa-equivalencies": {
+      "title": "Greenhouse Gas Equivalencies Calculator",
+      "publisher": "US Environmental Protection Agency (EPA)",
+      "year": 2025,
+      "url": "https://www.epa.gov/energy/greenhouse-gas-equivalencies-calculator"
+    },
+    "eea-textiles": {
+      "title": "Textiles in Europe's circular economy",
+      "publisher": "European Environment Agency (EEA)",
+      "year": 2020,
+      "url": "https://www.eea.europa.eu/publications/textiles-in-europes-circular-economy"
+    },
+    "carbon-trust": {
+      "title": "International carbon flows: clothing",
+      "publisher": "Carbon Trust",
+      "year": 2011,
+      "url": "https://www.carbontrust.com/"
+    },
+    "ademe": {
+      "title": "Impact CO2 (Base Carbone, Agribalyse)",
+      "publisher": "ADEME",
+      "year": 2026,
+      "url": "https://impactco2.fr/"
+    },
+    "estimate": {
+      "title": "Project estimate, needs a primary source before launch",
+      "publisher": "CO2 Optimiser team",
+      "year": 2026,
+      "url": "https://github.com/anna-arteeva/co2-optimiser/blob/main/docs/PRD.md"
+    }
+  },
+  "countries": {
+    "DE": {
+      "name": "Germany",
+      "flag": "🇩🇪",
+      "status": "sourced",
+      "baselineSource": "uba-rechner",
+      "baselineNote": "UBA average, consumption-based (imports included). Point estimate, UBA publishes no range.",
+      "distanceUnit": "km",
+      "categories": [
+        {
+          "id": "mobility",
+          "label": "Mobility",
+          "baseline": 2.1,
+          "sources": ["uba-rechner"],
+          "dimensions": [
+            {
+              "id": "everyday",
+              "label": "Getting around day to day",
+              "options": [
+                {
+                  "id": "car-everything",
+                  "label": "Car for everything",
+                  "delta": 0.7, "low": 0.4, "high": 1.0, "scale": 1.5,
+                  "confidence": "derived", "sources": ["desnz", "uba-rechner"],
+                  "basis": "About 50% more car-km than average (~+3,500 km/yr at ~0.2 kg CO2e/km incl. fuel supply)."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average mix of car, public transport, bike and walking." },
+                {
+                  "id": "public-transport",
+                  "label": "Mostly public transport",
+                  "delta": -0.6, "low": -0.8, "high": -0.4, "scale": 0.4,
+                  "confidence": "derived", "sources": ["desnz", "uba-rechner"],
+                  "basis": "About 60% of car-km shifted to bus and rail, which emit 3 to 4 times less per passenger-km."
+                },
+                {
+                  "id": "bike-walk",
+                  "label": "Bike & walk",
+                  "delta": -0.9, "low": -1.1, "high": -0.6, "scale": 0.1,
+                  "confidence": "derived", "sources": ["uba-tips", "desnz"],
+                  "basis": "Almost no car-km. UBA: replacing two 5 km car trips a day with cycling alone saves up to 0.5 t."
+                }
+              ]
+            },
+            {
+              "id": "car-type",
+              "label": "Car type",
+              "scaledBy": ["everyday"],
+              "note": "The effect scales with how much you drive.",
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Large petrol/diesel or SUV",
+                  "delta": 0.8, "low": 0.5, "high": 1.0,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "~0.28 kg CO2e/km vs ~0.17 for an average car (DESNZ), at average car-km."
+                },
+                { "id": "average", "label": "Average car", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["desnz"], "basis": "Average German car fleet." },
+                {
+                  "id": "small",
+                  "label": "Small car",
+                  "delta": -0.3, "low": -0.4, "high": -0.2,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "~0.14 kg CO2e/km for a small petrol car, plus lower manufacturing emissions."
+                },
+                {
+                  "id": "ev",
+                  "label": "Electric car",
+                  "delta": -0.6, "low": -0.8, "high": -0.4,
+                  "confidence": "derived", "sources": ["desnz", "uba-rechner"],
+                  "basis": "~18 kWh/100 km on the German grid mix (~0.36 kg/kWh) plus battery manufacturing: roughly half of an average car."
+                }
+              ]
+            },
+            {
+              "id": "flights",
+              "label": "Flights per year",
+              "nonCo2": true,
+              "options": [
+                {
+                  "id": "none",
+                  "label": "No flights",
+                  "delta": -0.5, "low": -0.7, "high": -0.3,
+                  "confidence": "estimate", "sources": ["uba-rechner", "estimate"],
+                  "basis": "Removes the average per-person flight share (~0.5 t incl. non-CO2 effects)."
+                },
+                {
+                  "id": "short-haul",
+                  "label": "1 short-haul return",
+                  "delta": -0.1, "low": -0.3, "high": 0.1,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "e.g. Berlin to Barcelona and back: ~3,000 km at ~0.13 kg CO2e/pkm incl. non-CO2 effects, ~0.4 t."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["uba-rechner"], "basis": "Average across all people, including the many who never fly." },
+                {
+                  "id": "long-haul",
+                  "label": "1 long-haul return",
+                  "delta": 2.0, "low": 1.4, "high": 3.5,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "e.g. Frankfurt to New York and back: ~12,400 km at ~0.15 kg CO2e/pkm (economy, incl. non-CO2), ~1.9 to 2.5 t. Stronger non-CO2 weighting gives up to ~4 t."
+                },
+                {
+                  "id": "frequent",
+                  "label": "Frequent flyer (3+ long-haul)",
+                  "delta": 6.0, "low": 4.0, "high": 10.0,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "Three or more long-haul returns a year, or many short trips."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "housing",
+          "label": "Housing",
+          "baseline": 1.9,
+          "sources": ["uba-rechner"],
+          "note": "Heating and hot water. Heat pump electricity is counted here.",
+          "dimensions": [
+            {
+              "id": "heating",
+              "label": "Heating",
+              "options": [
+                {
+                  "id": "oil",
+                  "label": "Oil",
+                  "delta": 0.6, "low": 0.4, "high": 0.7, "scale": 1.3,
+                  "confidence": "derived", "sources": ["desnz", "uba-rechner"],
+                  "basis": "Heating oil ~0.32 vs natural gas ~0.25 kg CO2e/kWh incl. supply chain (~30% more)."
+                },
+                { "id": "gas", "label": "Gas", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Natural gas is the most common heating type in Germany." },
+                {
+                  "id": "district",
+                  "label": "District heat",
+                  "delta": -0.3, "low": -0.6, "high": 0, "scale": 0.85,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Depends heavily on the local plant: from coal-fired (no saving) to waste heat or biomass."
+                },
+                {
+                  "id": "heat-pump",
+                  "label": "Heat pump",
+                  "delta": -0.95, "low": -1.2, "high": -0.6, "scale": 0.5,
+                  "confidence": "derived", "sources": ["desnz", "uba-rechner"],
+                  "basis": "Seasonal efficiency ~3 on the German grid (~0.36 kg/kWh) gives ~0.12 kg per kWh of heat, about half of gas."
+                }
+              ]
+            },
+            {
+              "id": "building",
+              "label": "Building",
+              "scaledBy": ["heating"],
+              "options": [
+                {
+                  "id": "unrenovated",
+                  "label": "Unrenovated",
+                  "delta": 0.6, "low": 0.3, "high": 0.9, "scale": 1.32,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Older buildings without retrofit use roughly 30 to 50% more heat than the average stock."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average German building stock." },
+                {
+                  "id": "insulated",
+                  "label": "Well insulated",
+                  "delta": -0.6, "low": -0.9, "high": -0.4, "scale": 0.68,
+                  "confidence": "derived", "sources": ["uba-tips"],
+                  "basis": "Good insulation saves 0.5 t+ per person per year (UBA)."
+                }
+              ]
+            },
+            {
+              "id": "space",
+              "label": "Living space",
+              "scaledBy": ["heating", "building"],
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Large (70 m²+ per person)",
+                  "delta": 0.7, "low": 0.4, "high": 1.0, "scale": 1.37,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Heat demand grows roughly with floor area; ~50% more space than the average of ~47 m² per person."
+                },
+                { "id": "average", "label": "Average (~47 m²)", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average living space per person in Germany." },
+                {
+                  "id": "small",
+                  "label": "Small or shared (<30 m²)",
+                  "delta": -0.5, "low": -0.7, "high": -0.3, "scale": 0.74,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Less floor area per person to heat; shared flats split the heating of common space."
+                }
+              ]
+            },
+            {
+              "id": "temperature",
+              "label": "Room temperature",
+              "scaledBy": ["heating", "building", "space"],
+              "options": [
+                {
+                  "id": "warm",
+                  "label": "Warm (22 °C+)",
+                  "delta": 0.2, "low": 0.1, "high": 0.3,
+                  "confidence": "derived", "sources": ["uba-tips"],
+                  "basis": "Rule of thumb: each 1 °C warmer adds about 6% heating energy."
+                },
+                { "id": "average", "label": "Average (20 °C)", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["uba-tips"], "basis": "Typical living-room temperature." },
+                {
+                  "id": "cool",
+                  "label": "Cooler (19 °C)",
+                  "delta": -0.1, "low": -0.15, "high": -0.06,
+                  "confidence": "derived", "sources": ["uba-tips"],
+                  "basis": "Each 1 °C less saves about 6% heating energy: a classic quick win."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "electricity",
+          "label": "Electricity",
+          "baseline": 0.6,
+          "sources": ["uba-rechner"],
+          "note": "Household electricity only. Electric cars and heat pumps are counted in Mobility and Housing.",
+          "dimensions": [
+            {
+              "id": "usage",
+              "label": "Household use",
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High (many devices, dryer)",
+                  "delta": 0.3, "low": 0.2, "high": 0.4, "scale": 1.5,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 50% above the average of ~1,500 kWh per person."
+                },
+                { "id": "average", "label": "Average (~1,500 kWh)", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "derived", "sources": ["uba-rechner"], "basis": "~1,500 kWh per person at the German grid mix (~0.36 kg/kWh)." },
+                {
+                  "id": "low",
+                  "label": "Low (efficient, mindful)",
+                  "delta": -0.2, "low": -0.25, "high": -0.15, "scale": 0.65,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 35% below average with efficient appliances and no standby."
+                }
+              ]
+            },
+            {
+              "id": "tariff",
+              "label": "Tariff",
+              "scaledBy": ["usage"],
+              "options": [
+                { "id": "grid", "label": "Grid mix", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "German grid mix." },
+                {
+                  "id": "green",
+                  "label": "Green tariff",
+                  "delta": -0.4, "low": -0.55, "high": -0.1,
+                  "confidence": "derived", "sources": ["uba-rechner"],
+                  "basis": "Wide range: the saving depends on whether the tariff funds new renewables or only buys certificates."
+                },
+                {
+                  "id": "solar",
+                  "label": "Own solar",
+                  "delta": -0.3, "low": -0.45, "high": -0.15,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Rooftop PV covering ~50 to 60% of own use at ~0.04 kg CO2e/kWh (lifecycle)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "food",
+          "label": "Food",
+          "baseline": 1.6,
+          "sources": ["uba-rechner"],
+          "dimensions": [
+            {
+              "id": "diet",
+              "label": "Diet",
+              "options": [
+                {
+                  "id": "meat-heavy",
+                  "label": "Meat-heavy",
+                  "delta": 0.5, "low": 0.3, "high": 0.8, "scale": 1.3,
+                  "confidence": "estimate", "sources": ["owid-food", "estimate"],
+                  "basis": "Meat most days, often beef. Beef is ~100 kg CO2e/kg vs ~10 for chicken (Poore & Nemecek)."
+                },
+                { "id": "mixed", "label": "Mixed", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average German diet." },
+                {
+                  "id": "flexitarian",
+                  "label": "Flexitarian",
+                  "delta": -0.2, "low": -0.3, "high": -0.1, "scale": 0.875,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Meat about once or twice a week."
+                },
+                {
+                  "id": "vegetarian",
+                  "label": "Vegetarian",
+                  "delta": -0.4, "low": -0.5, "high": -0.3, "scale": 0.75,
+                  "confidence": "sourced", "sources": ["uba-rechner"],
+                  "basis": "UBA: switching from a mixed to a vegetarian diet saves about 0.4 t a year."
+                },
+                {
+                  "id": "vegan",
+                  "label": "Vegan",
+                  "delta": -0.8, "low": -1.0, "high": -0.6, "scale": 0.5,
+                  "confidence": "sourced", "sources": ["uba-rechner"],
+                  "basis": "UBA: a vegan diet saves about 0.8 t a year compared to a mixed diet."
+                }
+              ]
+            },
+            {
+              "id": "waste",
+              "label": "Food waste",
+              "scaledBy": ["diet"],
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High",
+                  "delta": 0.15, "low": 0.1, "high": 0.25,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Throwing away about twice the average (~75 kg of household food waste per person a year)."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average household food waste." },
+                {
+                  "id": "low",
+                  "label": "Low",
+                  "delta": -0.1, "low": -0.15, "high": -0.05,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Planning, using leftovers, buying less: most avoidable waste avoided."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consumption",
+          "label": "Consumption",
+          "baseline": 2.5,
+          "sources": ["uba-rechner"],
+          "note": "Clothing, electronics, furniture, household goods and leisure.",
+          "dimensions": [
+            {
+              "id": "clothing",
+              "label": "Clothing",
+              "options": [
+                {
+                  "id": "fashion",
+                  "label": "Fashion lover",
+                  "delta": 0.5, "low": 0.3, "high": 0.8,
+                  "confidence": "estimate", "sources": ["eea-textiles", "estimate"],
+                  "basis": "Buying 2 to 3 times the average amount of new clothes (EU average ~0.27 t a year)."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["eea-textiles"], "basis": "EU textile consumption ~270 kg CO2e per person a year (EEA)." },
+                {
+                  "id": "conscious",
+                  "label": "Conscious (wear longer)",
+                  "delta": -0.07, "low": -0.1, "high": -0.04,
+                  "confidence": "derived", "sources": ["carbon-trust", "eea-textiles"],
+                  "basis": "Wearing clothes 1 to 2 years longer cuts their footprint by about 24% (Carbon Trust)."
+                },
+                {
+                  "id": "second-hand",
+                  "label": "Mostly second hand",
+                  "delta": -0.18, "low": -0.22, "high": -0.12,
+                  "confidence": "derived", "sources": ["eea-textiles", "estimate"],
+                  "basis": "Most new purchases replaced by second-hand ones: up to about two thirds of the average."
+                }
+              ]
+            },
+            {
+              "id": "electronics",
+              "label": "Electronics",
+              "options": [
+                {
+                  "id": "new-yearly",
+                  "label": "New every year",
+                  "delta": 0.3, "low": 0.15, "high": 0.5,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "A new smartphone (~60 to 80 kg) and a laptop or tablet (~200 to 300 kg) every year."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Typical replacement cycles." },
+                {
+                  "id": "long-life",
+                  "label": "Use long, buy refurbished",
+                  "delta": -0.1, "low": -0.15, "high": -0.05,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "Most of a device's footprint is manufacturing; doubling its life roughly halves it."
+                }
+              ]
+            },
+            {
+              "id": "other-goods",
+              "label": "Other goods & leisure",
+              "options": [
+                {
+                  "id": "lots-new",
+                  "label": "Buy a lot new",
+                  "delta": 0.6, "low": 0.3, "high": 1.0,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Frequent new furniture, gadgets, hobby gear, hotels and events."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["uba-rechner"], "basis": "Average German consumption." },
+                {
+                  "id": "less-reuse",
+                  "label": "Buy less, repair, borrow",
+                  "delta": -0.8, "low": -1.2, "high": -0.4,
+                  "confidence": "estimate", "sources": ["uba-tips", "estimate"],
+                  "basis": "UBA: about 2 t can be saved across all consumption by repairing, borrowing, buying less and used. This is the share outside clothing and electronics."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infrastructure",
+          "label": "Public infrastructure",
+          "baseline": 1.1,
+          "locked": true,
+          "sources": ["uba-rechner"],
+          "note": "Roads, schools, hospitals, administration. No individual choice changes this share; it is the case for policy.",
+          "dimensions": []
+        }
+      ],
+      "equivalents": [
+        { "id": "car", "label": "km by car", "tonnesEach": 0.00017, "sources": ["desnz"], "basis": "Average petrol car, ~0.17 kg CO2e/km." },
+        { "id": "flight", "label": "Frankfurt–New York returns", "tonnesEach": 1.9, "tonnesEachCo2Only": 1.1, "sources": ["desnz"], "basis": "~12,400 km, economy class." },
+        { "id": "steak", "label": "beef steaks (200 g)", "tonnesEach": 0.02, "sources": ["owid-food"], "basis": "Beef from beef herds, ~100 kg CO2e/kg." },
+        { "id": "trees", "label": "tree seedlings grown for 10 years", "tonnesEach": 0.06, "sources": ["epa-equivalencies"], "basis": "EPA: one urban tree seedling grown for 10 years absorbs ~0.06 t CO2." }
+      ]
+    },
+    "US": {
+      "name": "USA",
+      "flag": "🇺🇸",
+      "status": "provisional",
+      "baselineSource": "coolclimate",
+      "baselineNote": "Sources range from about 14 to 17+ t; the category split is a project estimate cross-checked against CoolClimate and UMich CSS. Needs one primary source before launch.",
+      "distanceUnit": "mi",
+      "categories": [
+        {
+          "id": "mobility",
+          "label": "Mobility",
+          "baseline": 4.5, "baselineLow": 4.0, "baselineHigh": 5.0,
+          "sources": ["coolclimate", "umich-css", "estimate"],
+          "dimensions": [
+            {
+              "id": "everyday",
+              "label": "Getting around day to day",
+              "options": [
+                {
+                  "id": "car-everything",
+                  "label": "Car for everything",
+                  "delta": 1.0, "low": 0.6, "high": 1.5, "scale": 1.3,
+                  "confidence": "estimate", "sources": ["epa-hub", "estimate"],
+                  "basis": "About 30% more vehicle-miles than the already high US average."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["coolclimate"], "basis": "Average US travel mix, mostly by car." },
+                {
+                  "id": "public-transport",
+                  "label": "Mostly public transport",
+                  "delta": -2.0, "low": -2.6, "high": -1.4, "scale": 0.4,
+                  "confidence": "estimate", "sources": ["epa-hub", "estimate"],
+                  "basis": "About 60% of car-miles shifted to bus and rail."
+                },
+                {
+                  "id": "bike-walk",
+                  "label": "Bike & walk",
+                  "delta": -2.8, "low": -3.2, "high": -2.2, "scale": 0.1,
+                  "confidence": "estimate", "sources": ["epa-hub", "estimate"],
+                  "basis": "Almost no car-miles."
+                }
+              ]
+            },
+            {
+              "id": "car-type",
+              "label": "Car type",
+              "scaledBy": ["everyday"],
+              "note": "The effect scales with how much you drive.",
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Pickup or large SUV",
+                  "delta": 0.9, "low": 0.5, "high": 1.3,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "Roughly 30% more fuel per mile than the average US light-duty vehicle."
+                },
+                { "id": "average", "label": "Average car", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["epa-equivalencies"], "basis": "Typical passenger vehicle, ~0.4 kg CO2/mile (EPA)." },
+                {
+                  "id": "small",
+                  "label": "Small or hybrid",
+                  "delta": -0.8, "low": -1.1, "high": -0.5,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "About 25% less fuel per mile."
+                },
+                {
+                  "id": "ev",
+                  "label": "Electric car",
+                  "delta": -1.8, "low": -2.3, "high": -1.2,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "~0.3 kWh/mile on the US grid (~0.37 kg/kWh, eGRID) plus battery manufacturing."
+                }
+              ]
+            },
+            {
+              "id": "flights",
+              "label": "Flights per year",
+              "nonCo2": true,
+              "options": [
+                {
+                  "id": "none",
+                  "label": "No flights",
+                  "delta": -1.0, "low": -1.3, "high": -0.7,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Removes the average per-person flight share (~1 t incl. non-CO2 effects)."
+                },
+                {
+                  "id": "short-haul",
+                  "label": "1 domestic return",
+                  "delta": -0.4, "low": -0.6, "high": -0.2,
+                  "confidence": "derived", "sources": ["desnz", "epa-hub"],
+                  "basis": "e.g. New York to Chicago and back: ~2,300 km, ~0.4 to 0.6 t incl. non-CO2 effects."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Average across all people, including those who never fly." },
+                {
+                  "id": "long-haul",
+                  "label": "1 long-haul return",
+                  "delta": 1.0, "low": 0.5, "high": 2.5,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "e.g. New York to London and back: ~11,100 km, ~1.7 t incl. non-CO2, on top of some domestic flying."
+                },
+                {
+                  "id": "frequent",
+                  "label": "Frequent flyer (3+ long-haul)",
+                  "delta": 5.0, "low": 3.0, "high": 9.0,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "Three or more long-haul returns a year, or many domestic trips."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "housing",
+          "label": "Housing",
+          "baseline": 2.3, "baselineLow": 1.9, "baselineHigh": 2.7,
+          "sources": ["coolclimate", "estimate"],
+          "note": "Heating and hot water. Heat pump and electric heating electricity is counted here.",
+          "dimensions": [
+            {
+              "id": "heating",
+              "label": "Heating",
+              "options": [
+                {
+                  "id": "oil",
+                  "label": "Oil",
+                  "delta": 0.7, "low": 0.5, "high": 0.9, "scale": 1.3,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "Heating oil emits ~30% more per kWh of heat than natural gas."
+                },
+                { "id": "gas", "label": "Gas", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["coolclimate"], "basis": "Natural gas is the most common US heating fuel." },
+                {
+                  "id": "electric",
+                  "label": "Electric resistance",
+                  "delta": 1.15, "low": 0.6, "high": 1.8, "scale": 1.5,
+                  "confidence": "estimate", "sources": ["epa-hub", "estimate"],
+                  "basis": "Baseboard or furnace heating on the US grid (~0.37 kg/kWh) emits more than gas."
+                },
+                {
+                  "id": "heat-pump",
+                  "label": "Heat pump",
+                  "delta": -1.0, "low": -1.4, "high": -0.6, "scale": 0.55,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "Seasonal efficiency ~3 on the US grid: roughly half the emissions of gas."
+                }
+              ]
+            },
+            {
+              "id": "building",
+              "label": "Building",
+              "scaledBy": ["heating"],
+              "options": [
+                {
+                  "id": "unrenovated",
+                  "label": "Older, drafty",
+                  "delta": 0.7, "low": 0.4, "high": 1.0, "scale": 1.3,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 30% more heat demand than the average home."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["coolclimate"], "basis": "Average US housing stock." },
+                {
+                  "id": "insulated",
+                  "label": "Well insulated",
+                  "delta": -0.7, "low": -1.0, "high": -0.4, "scale": 0.7,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 30% less heat demand after insulation and air sealing."
+                }
+              ]
+            },
+            {
+              "id": "space",
+              "label": "Living space",
+              "scaledBy": ["heating", "building"],
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Large house",
+                  "delta": 0.9, "low": 0.5, "high": 1.3, "scale": 1.4,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 40% more floor area per person than average."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["coolclimate"], "basis": "Average US living space per person." },
+                {
+                  "id": "small",
+                  "label": "Small or shared",
+                  "delta": -0.7, "low": -0.9, "high": -0.4, "scale": 0.7,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Apartment or shared home with about 30% less space per person."
+                }
+              ]
+            },
+            {
+              "id": "temperature",
+              "label": "Room temperature",
+              "scaledBy": ["heating", "building", "space"],
+              "options": [
+                {
+                  "id": "warm",
+                  "label": "Warm (72 °F+)",
+                  "delta": 0.2, "low": 0.1, "high": 0.3,
+                  "confidence": "derived", "sources": ["estimate"],
+                  "basis": "Each 1 °C (~2 °F) warmer adds about 6% heating energy."
+                },
+                { "id": "average", "label": "Average (68 °F)", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Typical thermostat setting." },
+                {
+                  "id": "cool",
+                  "label": "Cooler (66 °F)",
+                  "delta": -0.14, "low": -0.2, "high": -0.08,
+                  "confidence": "derived", "sources": ["estimate"],
+                  "basis": "Each 1 °C (~2 °F) less saves about 6% heating energy."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "electricity",
+          "label": "Electricity",
+          "baseline": 1.8, "baselineLow": 1.5, "baselineHigh": 2.2,
+          "sources": ["epa-hub", "coolclimate"],
+          "note": "Household electricity incl. air conditioning. Electric cars and electric heating are counted in Mobility and Housing.",
+          "dimensions": [
+            {
+              "id": "usage",
+              "label": "Household use",
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High (lots of AC, large home)",
+                  "delta": 0.9, "low": 0.6, "high": 1.2, "scale": 1.5,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 50% above the average of ~4,500 kWh per person."
+                },
+                { "id": "average", "label": "Average (~4,500 kWh)", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "derived", "sources": ["epa-hub"], "basis": "~4,500 kWh per person at ~0.39 kg/kWh (eGRID incl. losses)." },
+                {
+                  "id": "low",
+                  "label": "Low (efficient, mindful)",
+                  "delta": -0.6, "low": -0.75, "high": -0.4, "scale": 0.67,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About a third below average with efficient appliances and moderate AC."
+                }
+              ]
+            },
+            {
+              "id": "tariff",
+              "label": "Tariff",
+              "scaledBy": ["usage"],
+              "options": [
+                { "id": "grid", "label": "Grid mix", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["epa-hub"], "basis": "US average grid (eGRID)." },
+                {
+                  "id": "green",
+                  "label": "Green tariff",
+                  "delta": -1.4, "low": -1.7, "high": -0.4,
+                  "confidence": "derived", "sources": ["epa-hub"],
+                  "basis": "Wide range: the saving depends on whether the program adds new renewables or only buys certificates (RECs)."
+                },
+                {
+                  "id": "solar",
+                  "label": "Own solar",
+                  "delta": -1.1, "low": -1.5, "high": -0.6,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Rooftop PV covering ~60% of own use at ~0.04 kg CO2e/kWh (lifecycle)."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "food",
+          "label": "Food",
+          "baseline": 2.3, "baselineLow": 2.0, "baselineHigh": 2.6,
+          "sources": ["umich-css", "coolclimate"],
+          "dimensions": [
+            {
+              "id": "diet",
+              "label": "Diet",
+              "options": [
+                {
+                  "id": "meat-heavy",
+                  "label": "Meat-heavy",
+                  "delta": 0.7, "low": 0.4, "high": 1.1, "scale": 1.3,
+                  "confidence": "estimate", "sources": ["owid-food", "estimate"],
+                  "basis": "Meat most days, often beef (~100 kg CO2e/kg, Poore & Nemecek)."
+                },
+                { "id": "mixed", "label": "Mixed", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["umich-css"], "basis": "Average US diet." },
+                {
+                  "id": "flexitarian",
+                  "label": "Flexitarian",
+                  "delta": -0.3, "low": -0.4, "high": -0.2, "scale": 0.87,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Meat about once or twice a week."
+                },
+                {
+                  "id": "vegetarian",
+                  "label": "Vegetarian",
+                  "delta": -0.6, "low": -0.8, "high": -0.4, "scale": 0.74,
+                  "confidence": "derived", "sources": ["umich-css", "owid-food"],
+                  "basis": "US meat consumption is higher than German, so the saving is larger."
+                },
+                {
+                  "id": "vegan",
+                  "label": "Vegan",
+                  "delta": -1.0, "low": -1.3, "high": -0.7, "scale": 0.57,
+                  "confidence": "derived", "sources": ["umich-css", "owid-food"],
+                  "basis": "No animal products."
+                }
+              ]
+            },
+            {
+              "id": "waste",
+              "label": "Food waste",
+              "scaledBy": ["diet"],
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High",
+                  "delta": 0.25, "low": 0.15, "high": 0.35,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Wasting well above the US average, where about 30% of food is wasted."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["umich-css"], "basis": "Average household food waste." },
+                {
+                  "id": "low",
+                  "label": "Low",
+                  "delta": -0.2, "low": -0.3, "high": -0.1,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Planning, using leftovers, buying less."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consumption",
+          "label": "Consumption",
+          "baseline": 3.9, "baselineLow": 3.2, "baselineHigh": 4.6,
+          "sources": ["coolclimate", "estimate"],
+          "note": "Goods and services: clothing, electronics, furniture, household goods and leisure.",
+          "dimensions": [
+            {
+              "id": "clothing",
+              "label": "Clothing",
+              "options": [
+                {
+                  "id": "fashion",
+                  "label": "Fashion lover",
+                  "delta": 0.6, "low": 0.3, "high": 0.9,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Buying 2 to 3 times the average amount of new clothes."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "US clothing consumption, assumed ~0.35 t a year (above the EU 0.27 t)." },
+                {
+                  "id": "conscious",
+                  "label": "Conscious (wear longer)",
+                  "delta": -0.09, "low": -0.12, "high": -0.05,
+                  "confidence": "derived", "sources": ["carbon-trust"],
+                  "basis": "Wearing clothes 1 to 2 years longer cuts their footprint by about 24% (Carbon Trust)."
+                },
+                {
+                  "id": "second-hand",
+                  "label": "Mostly second hand",
+                  "delta": -0.23, "low": -0.28, "high": -0.15,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Most new purchases replaced by second-hand ones."
+                }
+              ]
+            },
+            {
+              "id": "electronics",
+              "label": "Electronics",
+              "options": [
+                {
+                  "id": "new-yearly",
+                  "label": "New every year",
+                  "delta": 0.4, "low": 0.2, "high": 0.6,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "A new phone, laptop or tablet and other gadgets every year."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Typical replacement cycles." },
+                {
+                  "id": "long-life",
+                  "label": "Use long, buy refurbished",
+                  "delta": -0.15, "low": -0.2, "high": -0.08,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "Most of a device's footprint is manufacturing; doubling its life roughly halves it."
+                }
+              ]
+            },
+            {
+              "id": "other-goods",
+              "label": "Other goods & leisure",
+              "options": [
+                {
+                  "id": "lots-new",
+                  "label": "Buy a lot new",
+                  "delta": 0.9, "low": 0.5, "high": 1.4,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Frequent new furniture, gadgets, hobby gear, hotels and events."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["coolclimate"], "basis": "Average US goods and services." },
+                {
+                  "id": "less-reuse",
+                  "label": "Buy less, repair, borrow",
+                  "delta": -1.1, "low": -1.6, "high": -0.6,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Repairing, borrowing, buying less and used, scaled from the UBA estimate for Germany."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infrastructure",
+          "label": "Public infrastructure",
+          "baseline": 1.2, "baselineLow": 1.0, "baselineHigh": 1.5,
+          "locked": true,
+          "sources": ["coolclimate", "estimate"],
+          "note": "Roads, schools, hospitals, defense, administration. No individual choice changes this share; it is the case for policy.",
+          "dimensions": []
+        }
+      ],
+      "equivalents": [
+        { "id": "car", "label": "miles by car", "tonnesEach": 0.0004, "sources": ["epa-equivalencies"], "basis": "Typical passenger vehicle, ~400 g CO2/mile (EPA)." },
+        { "id": "flight", "label": "New York–London returns", "tonnesEach": 1.7, "tonnesEachCo2Only": 1.0, "sources": ["desnz"], "basis": "~11,100 km, economy class." },
+        { "id": "steak", "label": "beef steaks (7 oz)", "tonnesEach": 0.02, "sources": ["owid-food"], "basis": "Beef from beef herds, ~100 kg CO2e/kg." },
+        { "id": "trees", "label": "tree seedlings grown for 10 years", "tonnesEach": 0.06, "sources": ["epa-equivalencies"], "basis": "EPA: one urban tree seedling grown for 10 years absorbs ~0.06 t CO2." }
+      ]
+    }
+  }
+}
