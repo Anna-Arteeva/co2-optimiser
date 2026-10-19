@@ -69,6 +69,9 @@ test("defaults reproduce the national baselines", () => {
   close(footprint(data.countries.US, {}, settings).value, 16.0, 1e-6);
   const us = footprint(data.countries.US, {}, settings);
   assert.ok(us.low < 14.5 && us.high > 17, "US range covers the 14 to 17+ t cited in sources");
+  close(footprint(data.countries.AE, {}, settings).value, 20.0, 1e-6);
+  const ae = footprint(data.countries.AE, {}, settings);
+  assert.ok(ae.low < 16 && ae.high > 24, "UAE range covers 20 t CO2 to ~24 t all-GHG (OWID)");
 });
 
 test("UBA diet savings", () => {

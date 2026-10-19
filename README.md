@@ -1,10 +1,10 @@
 # CO2 Optimiser
 
-A sandbox that starts from the average CO2 footprint of your country (Germany, USA) and shows which lifestyle changes move it the most. Product spec: [`docs/PRD.md`](docs/PRD.md).
+A sandbox that starts from the average CO2 footprint of your country (Germany, USA, UAE) and shows which lifestyle changes move it the most. Product spec: [`docs/PRD.md`](docs/PRD.md).
 
 ## What's in the MVP
 
-- **Country picker** with an instant baseline (UBA 9.8 t for Germany; a provisional 16 t for the USA).
+- **Country picker** with an instant baseline (UBA 9.8 t for Germany; a provisional 16 t for the USA; a provisional 20 t for the UAE).
 - **Stacked before/after bars** ("Average" vs "Your choices"), the ~1 t Paris-compatible target and an uncertainty whisker. Hover a segment for details; "Show as table" gives the same data as a table.
 - **Category cards** with option chips. Each chip shows how your total would change if you picked it, and the selected option shows its basis, confidence (Sourced / Derived / Estimate) and source.
 - **Top 3 levers**: the single switches with the biggest saving from where you are now, with a one-click "Try".
@@ -33,8 +33,9 @@ To add a country, add an entry under `countries` with its baselines, options and
 |---|---|---|
 | Germany | UBA 2026, sourced | Mix of sourced (UBA diet, insulation), derived (DESNZ car and flight factors) and estimates |
 | USA | **Provisional**: 16 t within a 14 to 17+ t range, category split is a project estimate | Mostly estimates and derived values |
+| UAE | **Provisional**: 20 t (OWID: ~20 t CO2, ~24 t all GHG per person, 2024), category split is a project estimate. Housing is cooling and desalinated water, on the Dubai (DEWA) grid | Mostly estimates |
 
-Before launch: pick one primary US source (CoolClimate is the lead candidate), replace every `"confidence": "estimate"` value with a sourced one, and re-check source links (they were not verified online when this version was written).
+Before launch: pick one primary US source (CoolClimate is the lead candidate) and a consumption-based UAE source, replace every `"confidence": "estimate"` value with a sourced one, and re-check source links (they were not verified online when this version was written).
 
 ## Development
 
