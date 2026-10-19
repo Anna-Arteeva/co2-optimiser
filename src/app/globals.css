@@ -2,7 +2,7 @@
 
 :root {
   color-scheme: light;
-  --page: #f9f9f7;
+  --page: #e9d5ff;
   --surface: #fcfcfb;
   --surface-2: #f0efec;
   --ink: #0b0b0b;
@@ -11,8 +11,8 @@
   --grid: #e1e0d9;
   --axis: #c3c2b7;
   --line: rgba(11, 11, 11, 0.1);
-  --accent: #2a78d6;
-  --accent-ink: #1c5cab;
+  --accent: #db2777;
+  --accent-ink: #be185d;
   --good: #006300;
   --locked: #a8a69e;
 
@@ -27,7 +27,7 @@
 @media (prefers-color-scheme: dark) {
   :root:where(:not([data-theme="light"])) {
     color-scheme: dark;
-    --page: #0d0d0d;
+    --page: #2e1065;
     --surface: #1a1a19;
     --surface-2: #262624;
     --ink: #f0efec;
@@ -36,8 +36,8 @@
     --grid: #2c2c2a;
     --axis: #383835;
     --line: rgba(255, 255, 255, 0.1);
-    --accent: #3987e5;
-    --accent-ink: #86b6ef;
+    --accent: #db2777;
+    --accent-ink: #f9a8d4;
     --good: #0ca30c;
     --locked: #6b6a64;
     --series-1: #3987e5;
@@ -50,7 +50,7 @@
 
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page: #0d0d0d;
+  --page: #2e1065;
   --surface: #1a1a19;
   --surface-2: #262624;
   --ink: #f0efec;
@@ -59,8 +59,8 @@
   --grid: #2c2c2a;
   --axis: #383835;
   --line: rgba(255, 255, 255, 0.1);
-  --accent: #3987e5;
-  --accent-ink: #86b6ef;
+  --accent: #db2777;
+  --accent-ink: #f9a8d4;
   --good: #0ca30c;
   --locked: #6b6a64;
   --series-1: #3987e5;
