@@ -2,6 +2,7 @@
 
 import { useCallback, useMemo, useState, useSyncExternalStore } from "react";
 import { categoryColor, data } from "@/lib/data";
+import { ThemeToggle } from "@/components/ThemeToggle";
 import {
   changedOptions,
   decodeState,
@@ -77,6 +78,7 @@ export function Optimizer() {
               </button>
             ))}
           </div>
+          <ThemeToggle />
         </div>
       </header>
 
