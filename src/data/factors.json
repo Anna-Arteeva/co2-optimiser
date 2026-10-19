@@ -74,6 +74,24 @@
       "year": 2026,
       "url": "https://impactco2.fr/"
     },
+    "owid-co2": {
+      "title": "CO2 and greenhouse gas emissions: country profiles",
+      "publisher": "Our World in Data (Global Carbon Project)",
+      "year": 2025,
+      "url": "https://ourworldindata.org/profile/co2/united-arab-emirates"
+    },
+    "dewa": {
+      "title": "Sustainability Report: grid emission factor",
+      "publisher": "Dubai Electricity and Water Authority (DEWA)",
+      "year": 2020,
+      "url": "https://www.dewa.gov.ae/"
+    },
+    "unep-food-waste": {
+      "title": "Food Waste Index Report 2024",
+      "publisher": "UN Environment Programme (UNEP)",
+      "year": 2024,
+      "url": "https://www.unep.org/resources/publication/food-waste-index-report-2024"
+    },
     "estimate": {
       "title": "Project estimate, needs a primary source before launch",
       "publisher": "CO2 Optimiser team",
@@ -931,6 +949,455 @@
         { "id": "car", "label": "miles by car", "tonnesEach": 0.0004, "sources": ["epa-equivalencies"], "basis": "Typical passenger vehicle, ~400 g CO2/mile (EPA)." },
         { "id": "flight", "label": "New York–London returns", "tonnesEach": 1.7, "tonnesEachCo2Only": 1.0, "sources": ["desnz"], "basis": "~11,100 km, economy class." },
         { "id": "steak", "label": "beef steaks (7 oz)", "tonnesEach": 0.02, "sources": ["owid-food"], "basis": "Beef from beef herds, ~100 kg CO2e/kg." },
+        { "id": "trees", "label": "tree seedlings grown for 10 years", "tonnesEach": 0.06, "sources": ["epa-equivalencies"], "basis": "EPA: one urban tree seedling grown for 10 years absorbs ~0.06 t CO2." }
+      ]
+    },
+    "AE": {
+      "name": "UAE",
+      "flag": "🇦🇪",
+      "status": "provisional",
+      "baselineSource": "owid-co2",
+      "baselineNote": "About 20 t CO2 per person (2024, Our World in Data), or ~24 t counting all greenhouse gases. Much of that is heavy industry and oil & gas, so the category split is a project estimate. Cooling and electricity use Dubai (DEWA) grid data. Needs a primary consumption-based source before launch.",
+      "distanceUnit": "km",
+      "categories": [
+        {
+          "id": "mobility",
+          "label": "Mobility",
+          "baseline": 4.6, "baselineLow": 3.6, "baselineHigh": 5.8,
+          "sources": ["owid-co2", "estimate"],
+          "dimensions": [
+            {
+              "id": "everyday",
+              "label": "Getting around day to day",
+              "options": [
+                {
+                  "id": "car-everything",
+                  "label": "Car for everything",
+                  "delta": 0.8, "low": 0.4, "high": 1.2, "scale": 1.3,
+                  "confidence": "estimate", "sources": ["desnz", "estimate"],
+                  "basis": "About 30% more car-km than the already car-heavy average, e.g. a long daily commute between emirates."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["estimate"], "basis": "Average travel mix: mostly car and taxi, plus Metro and bus." },
+                {
+                  "id": "public-transport",
+                  "label": "Mostly Metro, tram & bus",
+                  "delta": -1.4, "low": -1.8, "high": -0.9, "scale": 0.4,
+                  "confidence": "estimate", "sources": ["desnz", "estimate"],
+                  "basis": "About 60% of car-km shifted to Metro, tram and bus, which emit 3 to 4 times less per passenger-km."
+                },
+                {
+                  "id": "bike-walk",
+                  "label": "Walk, bike & e-scooter",
+                  "delta": -2.2, "low": -2.6, "high": -1.6, "scale": 0.1,
+                  "confidence": "estimate", "sources": ["desnz", "estimate"],
+                  "basis": "Almost no car-km. Realistic mainly when living close to work, e.g. in Downtown or Marina."
+                }
+              ]
+            },
+            {
+              "id": "car-type",
+              "label": "Car type",
+              "scaledBy": ["everyday"],
+              "note": "The effect scales with how much you drive.",
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Large SUV or 4x4",
+                  "delta": 0.9, "low": 0.5, "high": 1.3,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "~0.28 kg CO2e/km vs ~0.2 for the average UAE car (DESNZ factors), at average car-km."
+                },
+                { "id": "average", "label": "Average car", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["desnz", "estimate"], "basis": "Average UAE car, somewhat larger than the European average." },
+                {
+                  "id": "small",
+                  "label": "Small or hybrid",
+                  "delta": -0.6, "low": -0.8, "high": -0.4,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "About 30% less fuel per km than the average car."
+                },
+                {
+                  "id": "ev",
+                  "label": "Electric car",
+                  "delta": -1.0, "low": -1.4, "high": -0.6,
+                  "confidence": "derived", "sources": ["dewa", "desnz"],
+                  "basis": "~18 kWh/100 km (more with AC) on the Dubai grid (~0.4 kg/kWh, DEWA) plus battery manufacturing: roughly half of an average car."
+                }
+              ]
+            },
+            {
+              "id": "flights",
+              "label": "Flights per year",
+              "nonCo2": true,
+              "options": [
+                {
+                  "id": "none",
+                  "label": "No flights",
+                  "delta": -1.5, "low": -2.0, "high": -1.0,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Removes the average per-resident flight share (~1.5 t incl. non-CO2 effects). Most residents are expats who fly home regularly."
+                },
+                {
+                  "id": "short-haul",
+                  "label": "1 regional return",
+                  "delta": -1.0, "low": -1.3, "high": -0.7,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "e.g. Dubai to Mumbai and back: ~3,900 km at ~0.13 kg CO2e/pkm incl. non-CO2 effects, ~0.5 t."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Average across all residents, including those who rarely fly." },
+                {
+                  "id": "long-haul",
+                  "label": "1 long-haul return",
+                  "delta": 0.3, "low": -0.2, "high": 1.8,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "e.g. Dubai to London and back: ~11,000 km, ~1.7 t incl. non-CO2, slightly above the average resident's flying."
+                },
+                {
+                  "id": "frequent",
+                  "label": "Frequent flyer (3+ long-haul)",
+                  "delta": 4.0, "low": 2.5, "high": 8.0,
+                  "confidence": "derived", "sources": ["desnz"],
+                  "basis": "Three or more long-haul returns a year, or many regional trips."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "housing",
+          "label": "Housing",
+          "baseline": 2.4, "baselineLow": 1.8, "baselineHigh": 3.2,
+          "sources": ["dewa", "estimate"],
+          "note": "Cooling and desalinated water. There is no heating; air conditioning is most of home energy.",
+          "dimensions": [
+            {
+              "id": "cooling",
+              "label": "Cooling",
+              "options": [
+                {
+                  "id": "old-units",
+                  "label": "Old window or split units",
+                  "delta": 0.5, "low": 0.3, "high": 0.8, "scale": 1.21,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Older, poorly maintained units use roughly 25 to 40% more electricity for the same cooling."
+                },
+                { "id": "average", "label": "Average split or central AC", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["dewa", "estimate"], "basis": "Typical AC on the Dubai grid (~0.4 kg CO2e/kWh, DEWA)." },
+                {
+                  "id": "efficient",
+                  "label": "High-efficiency inverter AC",
+                  "delta": -0.4, "low": -0.6, "high": -0.2, "scale": 0.83,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Modern inverter units use roughly 20 to 30% less electricity than the average stock."
+                },
+                {
+                  "id": "district",
+                  "label": "District cooling",
+                  "delta": -0.6, "low": -0.8, "high": -0.3, "scale": 0.75,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Central chiller plants use roughly 40 to 50% less electricity per unit of cooling than individual AC units."
+                }
+              ]
+            },
+            {
+              "id": "building",
+              "label": "Building",
+              "scaledBy": ["cooling"],
+              "options": [
+                {
+                  "id": "unrenovated",
+                  "label": "Older, lots of unshaded glass",
+                  "delta": 0.5, "low": 0.3, "high": 0.8, "scale": 1.21,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Poor insulation and solar gain through glass raise cooling demand by roughly 20 to 30%."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["estimate"], "basis": "Average UAE building stock." },
+                {
+                  "id": "insulated",
+                  "label": "Efficient (green building)",
+                  "delta": -0.5, "low": -0.7, "high": -0.3, "scale": 0.79,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Insulation, shading and low-e glass (as in Dubai's green building rules) cut cooling demand by roughly 20 to 30%."
+                }
+              ]
+            },
+            {
+              "id": "space",
+              "label": "Living space",
+              "scaledBy": ["cooling", "building"],
+              "options": [
+                {
+                  "id": "large",
+                  "label": "Villa",
+                  "delta": 1.9, "low": 1.0, "high": 3.0, "scale": 1.79,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Much more floor area and roof to cool per person. Abu Dhabi villa studies find very high per-person electricity use."
+                },
+                { "id": "average", "label": "Average apartment", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["estimate"], "basis": "Average living space per resident." },
+                {
+                  "id": "small",
+                  "label": "Small or shared",
+                  "delta": -0.7, "low": -0.9, "high": -0.4, "scale": 0.71,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Studio or shared flat with about 30% less space to cool per person."
+                }
+              ]
+            },
+            {
+              "id": "temperature",
+              "label": "AC set-point",
+              "scaledBy": ["cooling", "building", "space"],
+              "options": [
+                {
+                  "id": "cold",
+                  "label": "Cold (21 °C or lower)",
+                  "delta": 0.3, "low": 0.2, "high": 0.45,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Rule of thumb: each 1 °C cooler adds roughly 6 to 8% cooling energy."
+                },
+                { "id": "average", "label": "Average (23 °C)", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Typical thermostat setting." },
+                {
+                  "id": "warm",
+                  "label": "Warmer (25 °C+)",
+                  "delta": -0.25, "low": -0.35, "high": -0.15,
+                  "confidence": "estimate", "sources": ["dewa", "estimate"],
+                  "basis": "Each 1 °C warmer saves roughly 6 to 8% cooling energy. DEWA recommends 24 °C or higher."
+                }
+              ]
+            },
+            {
+              "id": "water",
+              "label": "Water use",
+              "note": "Nearly all tap water is desalinated, which takes a lot of energy.",
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High (garden, pool)",
+                  "delta": 0.4, "low": 0.2, "high": 0.7,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Irrigated garden or pool can double household water use; desalination takes ~4 to 5 kWh per m³."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "UAE water use per person is among the highest in the world." },
+                {
+                  "id": "low",
+                  "label": "Low (short showers, efficient fixtures)",
+                  "delta": -0.15, "low": -0.2, "high": -0.08,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Aerators, efficient fixtures and short showers cut water use by roughly a third."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "electricity",
+          "label": "Electricity",
+          "baseline": 1.0, "baselineLow": 0.7, "baselineHigh": 1.4,
+          "sources": ["dewa", "estimate"],
+          "note": "Appliances, lighting and hot water. Air conditioning is counted in Housing, electric cars in Mobility.",
+          "dimensions": [
+            {
+              "id": "usage",
+              "label": "Household use",
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High (many devices, dryer)",
+                  "delta": 0.5, "low": 0.3, "high": 0.7, "scale": 1.5,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 50% above the average of ~2,500 kWh per person (excluding AC)."
+                },
+                { "id": "average", "label": "Average (~2,500 kWh)", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "derived", "sources": ["dewa", "estimate"], "basis": "~2,500 kWh per person at ~0.4 kg CO2e/kWh (DEWA)." },
+                {
+                  "id": "low",
+                  "label": "Low (efficient, mindful)",
+                  "delta": -0.35, "low": -0.45, "high": -0.25, "scale": 0.65,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "About 35% below average with efficient appliances and no standby."
+                }
+              ]
+            },
+            {
+              "id": "tariff",
+              "label": "Tariff",
+              "scaledBy": ["usage"],
+              "options": [
+                { "id": "grid", "label": "Grid mix", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "sourced", "sources": ["dewa"], "basis": "Dubai grid, mostly natural gas with a growing solar share (~0.4 kg CO2e/kWh)." },
+                {
+                  "id": "green",
+                  "label": "Green certificates",
+                  "delta": -0.6, "low": -0.9, "high": -0.1,
+                  "confidence": "estimate", "sources": ["dewa", "estimate"],
+                  "basis": "Wide range: the saving depends on whether the certificates fund new solar or only reassign existing output."
+                },
+                {
+                  "id": "solar",
+                  "label": "Own solar",
+                  "delta": -0.5, "low": -0.7, "high": -0.3,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Rooftop PV (net-metered under Shams Dubai) covering ~60% of own use at ~0.03 kg CO2e/kWh (lifecycle). Mostly an option for villas."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "food",
+          "label": "Food",
+          "baseline": 2.6, "baselineLow": 2.1, "baselineHigh": 3.2,
+          "sources": ["owid-food", "estimate"],
+          "note": "About 85 to 90% of food is imported.",
+          "dimensions": [
+            {
+              "id": "diet",
+              "label": "Diet",
+              "options": [
+                {
+                  "id": "meat-heavy",
+                  "label": "Meat-heavy",
+                  "delta": 0.8, "low": 0.5, "high": 1.2, "scale": 1.31,
+                  "confidence": "estimate", "sources": ["owid-food", "estimate"],
+                  "basis": "Meat most days, often beef or lamb (~100 and ~40 kg CO2e/kg, Poore & Nemecek)."
+                },
+                { "id": "mixed", "label": "Mixed", "default": true, "delta": 0, "low": 0, "high": 0, "scale": 1, "confidence": "estimate", "sources": ["estimate"], "basis": "Average UAE diet." },
+                {
+                  "id": "flexitarian",
+                  "label": "Flexitarian",
+                  "delta": -0.35, "low": -0.5, "high": -0.2, "scale": 0.865,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Meat about once or twice a week."
+                },
+                {
+                  "id": "vegetarian",
+                  "label": "Vegetarian",
+                  "delta": -0.7, "low": -0.9, "high": -0.5, "scale": 0.73,
+                  "confidence": "estimate", "sources": ["owid-food", "estimate"],
+                  "basis": "Scaled from the UBA estimate for Germany to a higher-meat average diet."
+                },
+                {
+                  "id": "vegan",
+                  "label": "Vegan",
+                  "delta": -1.1, "low": -1.4, "high": -0.8, "scale": 0.58,
+                  "confidence": "estimate", "sources": ["owid-food", "estimate"],
+                  "basis": "No animal products."
+                }
+              ]
+            },
+            {
+              "id": "waste",
+              "label": "Food waste",
+              "scaledBy": ["diet"],
+              "options": [
+                {
+                  "id": "high",
+                  "label": "High",
+                  "delta": 0.3, "low": 0.2, "high": 0.45,
+                  "confidence": "estimate", "sources": ["unep-food-waste", "estimate"],
+                  "basis": "Throwing away well above the average, e.g. regularly over-catering."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["unep-food-waste"], "basis": "Household food waste above the global average of ~79 kg per person a year (UNEP)." },
+                {
+                  "id": "low",
+                  "label": "Low",
+                  "delta": -0.25, "low": -0.35, "high": -0.12,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Planning, using leftovers, buying less."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "consumption",
+          "label": "Consumption",
+          "baseline": 5.0, "baselineLow": 3.8, "baselineHigh": 6.5,
+          "sources": ["owid-co2", "estimate"],
+          "note": "Goods and services: clothing, electronics, furniture, household goods, hotels and leisure.",
+          "dimensions": [
+            {
+              "id": "clothing",
+              "label": "Clothing",
+              "options": [
+                {
+                  "id": "fashion",
+                  "label": "Fashion lover",
+                  "delta": 0.8, "low": 0.4, "high": 1.2,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Buying 2 to 3 times the average amount of new clothes."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["eea-textiles", "estimate"], "basis": "Assumed ~0.4 t a year, above the EU average of 0.27 t." },
+                {
+                  "id": "conscious",
+                  "label": "Conscious (wear longer)",
+                  "delta": -0.1, "low": -0.13, "high": -0.06,
+                  "confidence": "derived", "sources": ["carbon-trust"],
+                  "basis": "Wearing clothes 1 to 2 years longer cuts their footprint by about 24% (Carbon Trust)."
+                },
+                {
+                  "id": "second-hand",
+                  "label": "Mostly second hand",
+                  "delta": -0.25, "low": -0.3, "high": -0.15,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Most new purchases replaced by second-hand ones."
+                }
+              ]
+            },
+            {
+              "id": "electronics",
+              "label": "Electronics",
+              "options": [
+                {
+                  "id": "new-yearly",
+                  "label": "New every year",
+                  "delta": 0.4, "low": 0.2, "high": 0.6,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "A new phone, laptop or tablet and other gadgets every year."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Typical replacement cycles." },
+                {
+                  "id": "long-life",
+                  "label": "Use long, buy refurbished",
+                  "delta": -0.15, "low": -0.2, "high": -0.08,
+                  "confidence": "estimate", "sources": ["ademe", "estimate"],
+                  "basis": "Most of a device's footprint is manufacturing; doubling its life roughly halves it."
+                }
+              ]
+            },
+            {
+              "id": "other-goods",
+              "label": "Other goods & leisure",
+              "options": [
+                {
+                  "id": "lots-new",
+                  "label": "Buy a lot new",
+                  "delta": 1.4, "low": 0.7, "high": 2.2,
+                  "confidence": "estimate", "sources": ["estimate"],
+                  "basis": "Frequent shopping, new furniture and gadgets, hotel stays and events."
+                },
+                { "id": "average", "label": "Average", "default": true, "delta": 0, "low": 0, "high": 0, "confidence": "estimate", "sources": ["estimate"], "basis": "Average UAE goods and services." },
+                {
+                  "id": "less-reuse",
+                  "label": "Buy less, repair, borrow",
+                  "delta": -1.4, "low": -2.0, "high": -0.7,
+                  "confidence": "estimate", "sources": ["uba-tips", "estimate"],
+                  "basis": "Repairing, borrowing, buying less and used, scaled from the UBA estimate for Germany."
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "infrastructure",
+          "label": "Public infrastructure",
+          "baseline": 4.4, "baselineLow": 2.8, "baselineHigh": 6.0,
+          "locked": true,
+          "sources": ["owid-co2", "estimate"],
+          "note": "Roads, construction, public buildings and services, and the energy and water systems behind them. No individual choice changes this share; it is the case for policy.",
+          "dimensions": []
+        }
+      ],
+      "equivalents": [
+        { "id": "car", "label": "km by car", "tonnesEach": 0.0002, "sources": ["desnz", "estimate"], "basis": "Average UAE car, ~0.2 kg CO2e/km." },
+        { "id": "flight", "label": "Dubai–London returns", "tonnesEach": 1.7, "tonnesEachCo2Only": 1.0, "sources": ["desnz"], "basis": "~11,000 km, economy class." },
+        { "id": "steak", "label": "beef steaks (200 g)", "tonnesEach": 0.02, "sources": ["owid-food"], "basis": "Beef from beef herds, ~100 kg CO2e/kg." },
         { "id": "trees", "label": "tree seedlings grown for 10 years", "tonnesEach": 0.06, "sources": ["epa-equivalencies"], "basis": "EPA: one urban tree seedling grown for 10 years absorbs ~0.06 t CO2." }
       ]
     }

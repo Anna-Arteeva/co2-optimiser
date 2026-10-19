@@ -8,7 +8,7 @@
 
 ## 1. Summary
 
-A web app that shows people what their CO2 footprint is made of and which changes would move it the most. Users start from the average footprint of their country (Germany and the USA first), broken down into the big categories: mobility, housing, food, consumption (incl. clothing), electricity and public infrastructure. Every category comes with lifestyle options that default to "average". Switching an option (e.g. diet from "mixed" to "vegetarian") updates the footprint instantly and puts the change in relatable terms ("= 2,000 km of driving").
+A web app that shows people what their CO2 footprint is made of and which changes would move it the most. Users start from the average footprint of their country (Germany, the USA and the UAE first), broken down into the big categories: mobility, housing, food, consumption (incl. clothing), electricity and public infrastructure. Every category comes with lifestyle options that default to "average". Switching an option (e.g. diet from "mixed" to "vegetarian") updates the footprint instantly and puts the change in relatable terms ("= 2,000 km of driving").
 
 The core idea: most people guess wrong about what matters. The app replaces guessing with a sandbox.
 
@@ -40,7 +40,7 @@ The core idea: most people guess wrong about what matters. The app replaces gues
 - Precise personal carbon accounting (bills, bank transactions, receipts).
 - Carbon offsetting or selling offsets.
 - Company / Scope 3 reporting.
-- Countries beyond Germany and the USA.
+- Countries beyond Germany, the USA and the UAE.
 
 ## 5. Initial findings
 
@@ -58,6 +58,8 @@ The core idea: most people guess wrong about what matters. The app replaces gues
 | Electricity | 0.6 | 6% |
 
 **USA:** commonly cited at **around 14 to 17 t CO2e per person**, roughly 4 times the global average of about 4 to 4.5 t. Transportation and home energy together make up more than half; food is about 10 to 15%; goods and services cover the rest. Sources vary more than for Germany (see section 8), so the US baseline needs a single, defensible primary source before launch. CoolClimate (UC Berkeley) is the strongest candidate.
+
+**UAE (provisional):** about **20 t CO2 per person** (2024, Our World in Data), or ~24 t counting all greenhouse gases, among the highest in the world. Much of it is heavy industry and oil & gas, so the split is a project estimate: mobility 4.6, cooling & water 2.4, electricity 1.0, food 2.6, consumption 5.0, public infrastructure 4.4 t. There is no heating; air conditioning and desalinated water take its place in Housing. Grid factor ~0.4 kg CO2e/kWh (DEWA, Dubai).
 
 **Long-term target:** around 1 t per person (Paris-compatible), often rounded to 1 to 2 t by 2050.
 
@@ -110,7 +112,7 @@ This keeps the math simple, explainable and easy to extend to new countries by s
 
 ### 6.3 Key features (MVP)
 
-1. **Country picker** (DE, US) with instant baseline donut/bar chart.
+1. **Country picker** (DE, US, AE) with instant baseline donut/bar chart.
 2. **Category cards** with option toggles; footprint updates live.
 3. **Before/after comparison**: "average you" vs. "your choices", with the delta highlighted.
 4. **Impact ranking**: "Your top 3 levers", sorted by t CO2e saved.
