@@ -89,7 +89,7 @@ export function Optimizer() {
       )}
 
       <section className="rounded-2xl border border-line bg-surface p-5 sm:p-6" aria-labelledby="summary-heading">
-        <div className="flex flex-wrap items-end justify-between gap-4">
+        <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
             <h2 id="summary-heading" className="text-sm text-ink-2">
               {changed === 0 ? `Average person in ${country.name}` : "Your footprint"}
@@ -132,6 +132,40 @@ export function Optimizer() {
               <ShareButton summary={`My CO2 footprint: ${tonnes(yours.value)} a year (${signedPercent(diff / average.value)} vs the ${country.name} average).`} />
             </div>
           </div>
+        </div>
+        <div className="mt-3 border-t border-line pt-3">
+          <p className="text-sm text-ink-2">
+            Estimated annual greenhouse gas footprint per person, measured in tonnes of CO2e.
+          </p>
+          <details className="group mt-2 text-sm">
+            <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-accent-ink hover:underline [&::-webkit-details-marker]:hidden">
+              <svg
+                aria-hidden
+                viewBox="0 0 16 16"
+                className="size-4 transition-transform group-open:rotate-180"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="1.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="m4 6 4 4 4-4" />
+              </svg>
+              Understanding the measurement
+            </summary>
+            <dl className="mt-3 grid gap-y-3 sm:grid-cols-[max-content_fit-content(24rem)] sm:gap-x-6">
+              <div>
+                <dt className="font-medium text-ink">t = Metric tonne</dt>
+                <dd className="text-ink-2">1 t = 1,000 kg.</dd>
+              </div>
+              <div>
+                <dt className="font-medium text-ink">CO2e = Carbon dioxide equivalent</dt>
+                <dd className="text-ink-2">
+                  A common unit for comparing the climate impact of different greenhouse gases.
+                </dd>
+              </div>
+            </dl>
+          </details>
         </div>
 
         <FootprintChart
